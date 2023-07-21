@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search our accomodations</title>
+  </head>
+  <body>
+    <h1>Search our accomodations</h1>
+    <form data-th-action="@{/search}" method="get" data-th-object="${searchForm}">
+      <table>
+        <tr>
+          <td>Country:</td>
+          <td><select data-th-field="*{country}">
+                <option data-th-each="country: ${countryList}" data-th-value="${country}" data-th-text="${country}"></option>
+          </select></td>
+          <td><span class="error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red;"></span></td>
+        </tr>
+        <tr>
+            <td>Number of guests:</td>
+            <td><input type="number" data-th-field="*{guests}"></td>
+            <td><span class="error" th:if="${#fields.hasErrors('guests')}" th:errors="*{guests}" style="color: red;"></span></td>
+        </tr>
+        <tr>
+            <td>Price range:</td>
+            <td>Min <input type="number" step="0.1" data-th-field="*{min}"> Max <input type="number" step="0.1" data-th-field="*{max}"></td>
+            <td><span class="error" th:if="${#fields.hasErrors('min')}" th:errors="*{min}" style="color: red;"></span>
+                <span class="error" th:if="${#fields.hasErrors('max')}" th:errors="*{max}" style="color: red;"></span>
+                 <span class="error" th:if="${#fields.hasErrors('global')}" th:text="|Invalid range|" style="color: red;"></span></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button type="submit">Search</button></td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>

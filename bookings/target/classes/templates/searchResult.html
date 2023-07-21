@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Listings</title>
+    <link rel="stylesheet" data-th-href="@{/style.css}">
+</head>
+<body>
+    <h1 data-th-text="|Listings for ${searchListings[0].country}|"></h1>
+
+    <a data-th-href="@{index}">Back</a>
+
+    <table>
+        <thead>
+            <tr>
+                <td>Street</td>
+                <td>Price</td>
+                <td>Image</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-th-each="listing: ${searchListings}">
+                <td data-th-text="${listing.street}"></td>
+                <td data-th-text="${listing.price}"></td>
+                <td><img data-th-src="${listing.imageUrl}" alt=""></td>
+                <td><form data-th-action="@{/search/{id}(id=${listing.id})}" method="get">
+                    <button type="submit">Details</button>
+                </form></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listing Details</title>
+    <link rel="stylesheet" data-th-href="@{/style.css}">
+</head>
+<body>
+    <a data-th-href="@{previousPage}">Back</a>
+
+    <table>
+        <tr>
+            <td>Id:</td>
+            <td data-th-text="${listing.summary.id}"></td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td class="description"><p data-th-text="${listing.desc}"></p><img data-th-src="${listing.summary.imageUrl}" alt=""></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td><table class="inner-table">
+                <tr class="inner-table-row">
+                    <td class="inner-table-cell" data-th-text="${listing.summary.street}"></td>
+                </tr>
+                <tr class="inner-table-row">
+                    <td class="inner-table-cell" data-th-text="${listing.suburb}"></td>
+                </tr>
+                <tr class="inner-table-row">
+                    <td class="inner-table-cell" data-th-text="${listing.summary.country}"></td>
+                </tr>
+            </table></td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td data-th-text="${listing.summary.price}"></td>
+        </tr>
+        <tr>
+            <td>Amenities</td>
+            <td><span data-th-each="amenity: ${listing.amenities}" data-th-text="|${amenity}, |"></span></td>
+        </tr>
+    </table>
+    
+    <h1>Bookings</h1>
+
+    <form data-th-action="@{/book/{lid}(lid=${listingId})}" method="post" data-th-object="${bookingForm}">
+        <input type="hidden" data-th-field="*{lid}" data-th-value="${listing.summary.id}">
+        <table class="booking-table">
+            <tr class="booking-table-row">
+                <td class="booking-table-cell">Name:</td>
+                <td class="booking-table-cell"><input type="text" name="" id="" data-th-field="*{name}"></td>
+            </tr>
+            <tr class="booking-table-row">
+                <td class="booking-table-cell">Email:</td>
+                <td class="booking-table-cell"><input type="email" name="" id="" data-th-field="*{email}"></td>
+            </tr>
+            <tr class="booking-table-row">
+                <td class="booking-table-cell">Arrival:</td>
+                <td class="booking-table-cell"><input type="date" name="" id="" data-th-field="*{arrival}"></td>
+            </tr>
+            <tr class="booking-table-row">
+                <td class="booking-table-cell">Stay:</td>
+                <td class="booking-table-cell"><input type="number" name="" id="" step="1" data-th-field="*{duration}"> days <span class="error" th:if="${#fields.hasErrors('global')}" th:text="|Not enough vacancies|" style="color: red;"></span></td>
+            </tr>
+            <tr class="booking-table-row">
+                <td class="booking-table-cell"></td>
+                <td class="booking-table-cell"><button type="submit">Book</button></td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
