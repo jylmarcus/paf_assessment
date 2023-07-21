@@ -8,6 +8,7 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import vttp2023.batch3.assessment.paf.bookings.models.FullListing;
 import vttp2023.batch3.assessment.paf.bookings.models.SearchForm;
 import vttp2023.batch3.assessment.paf.bookings.models.SummarizedListing;
 import vttp2023.batch3.assessment.paf.bookings.repositories.ListingsRepository;
@@ -29,13 +30,19 @@ public class ListingsService {
 
 		List<SummarizedListing> listings = new ArrayList<SummarizedListing>();
 		for(Document d : result) {
-			SummarizedListing listing = new SummarizedListing(d.getString("_id"), d.getEmbedded(Arrays.asList("address"), Document.class).getString("street"), d.getDouble(listRepo.F_PRICE), d.getEmbedded(Arrays.asList("images"), Document.class).getString("picture_url"), d.getEmbedded(Arrays.asList("address"), Document.class).getString("country"));
+			SummarizedListing listing = ListingsUtils.createSummarizedListing(d);
 			listings.add(listing);
 		}
 		return listings;
 	}
 
 	//TODO: Task 4
+	public FullListing getListingById(String id) {
+		Document result = listRepo.getListingById(id);
+		SummarizedListing listSumm = ListingsUtils.createSummarizedListing(result);
+		FullListing listFull = ListingsUtils.createFullListing(listSumm, result);
+		return listFull;
+	}
 	
 
 	//TODO: Task 5

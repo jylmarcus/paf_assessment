@@ -6,6 +6,10 @@ import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
@@ -24,8 +28,11 @@ public class ListingsRepository {
 	public final String F_COUNTRY = "address.country";
 	public final String F_ACCOMMODATION = "accommodates";
 	public final String F_PRICE = "price";
+	public final String F_DESC = "description";
 	public final String F_STREET = "address.street";
+	public final String F_SUBURB = "address.suburb";
 	public final String F_IMAGE = "images.picture_url";
+	public final String F_AMENITIES = "amenities";
 
 	// TODO: Task 2
 	public DistinctIterable<String> getCountries() {
@@ -66,8 +73,11 @@ public class ListingsRepository {
 	}
 
 	// TODO: Task 4
-	public void getListingById(String id) {
-		
+	public Document getListingById(String id) {
+		/*
+		 * db.listings.find({_id: id})
+		 */
+		 return mongoTemplate.findById(id, Document.class, C_NAME);
 	}
 
 	// TODO: Task 5

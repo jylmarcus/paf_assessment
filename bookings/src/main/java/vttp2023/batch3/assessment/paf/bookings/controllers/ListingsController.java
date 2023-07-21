@@ -3,6 +3,7 @@ package vttp2023.batch3.assessment.paf.bookings.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,9 +11,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import jakarta.validation.Valid;
+import vttp2023.batch3.assessment.paf.bookings.models.BookingForm;
+import vttp2023.batch3.assessment.paf.bookings.models.FullListing;
 import vttp2023.batch3.assessment.paf.bookings.models.SearchForm;
 import vttp2023.batch3.assessment.paf.bookings.models.SummarizedListing;
 import vttp2023.batch3.assessment.paf.bookings.services.ListingsService;
@@ -55,12 +59,27 @@ public class ListingsController {
 
 	//TODO: Task 4
 	@GetMapping("/search/{id}")
-	public String getListing(@PathVariable("id") String id, Model model){
-		
+	public String getListing(@PathVariable("id") String id, @RequestHeader(value = HttpHeaders.REFERER, required = false) String referrer, Model model){
+		FullListing listing = listService.getListingById(id);
+		model.addAttribute("listing", listing);
+		model.addAttribute("bookingForm", new BookingForm());
+
+		//back link or button to return to view 2
+		if(referrer != null) {
+			model.addAttribute("prevPage", referrer);
+		}
+
+		return "detailedlisting";
 	}
 	
 
 	//TODO: Task 5
+	@PostMapping("/book")
+	public String bookAccomodation(@ModelAttribute("bookingForm") BookingForm bookingForm, Model model){
+		
+
+		return "bookingSuccess";
+	}
 
 
 }
