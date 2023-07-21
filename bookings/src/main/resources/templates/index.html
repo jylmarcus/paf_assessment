@@ -27,7 +27,7 @@
             <td>Min <input type="number" step="0.1" data-th-field="*{min}"> Max <input type="number" step="0.1" data-th-field="*{max}"></td>
             <td><span class="error" th:if="${#fields.hasErrors('min')}" th:errors="*{min}" style="color: red;"></span>
                 <span class="error" th:if="${#fields.hasErrors('max')}" th:errors="*{max}" style="color: red;"></span>
-                <span class="error" th:if="${#fields.hasErrors('global')}" th:text="|Invalid range|" style="color: red;"></span></td>
+                 class="err<spanor" th:if="${#fields.hasErrors('global')}" th:text="|Invalid range|" style="color: red;"></span></td>
         </tr>
         <tr>
             <td></td>

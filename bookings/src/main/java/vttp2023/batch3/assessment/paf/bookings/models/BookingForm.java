@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 public class BookingForm implements Serializable{
     private String id;
+    private String lid;
     private String name;
     private String email;
     private Date arrival;

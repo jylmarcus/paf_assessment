@@ -45,7 +45,8 @@
     
     <h1>Bookings</h1>
 
-    <form data-th-action="@{/book}" method="post" data-th-object="${bookingForm}">
+    <form data-th-action="@{/book/{lid}(lid=${listing.summary.id})}" method="post" data-th-object="${bookingForm}">
+        <input type="hidden" data-th-field="*{lid}" data-th-value="${listing.summary.id}">
         <table class="booking-table">
             <tr class="booking-table-row">
                 <td class="booking-table-cell">Name:</td>
@@ -61,7 +62,7 @@
             </tr>
             <tr class="booking-table-row">
                 <td class="booking-table-cell">Stay:</td>
-                <td class="booking-table-cell"><input type="number" name="" id="" step="1" data-th-field="*{duration}"> days</td>
+                <td class="booking-table-cell"><input type="number" name="" id="" step="1" data-th-field="*{duration}"> days <span class="error" th:if="${#fields.hasErrors('global')}" th:text="|Not enough vacancies|" style="color: red;"></span></td>
             </tr>
             <tr class="booking-table-row">
                 <td class="booking-table-cell"></td>

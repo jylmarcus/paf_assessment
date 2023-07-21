@@ -74,10 +74,19 @@ public class ListingsController {
 	
 
 	//TODO: Task 5
-	@PostMapping("/book")
-	public String bookAccomodation(@ModelAttribute("bookingForm") BookingForm bookingForm, Model model){
-		
+	@PostMapping("/book/{id}")
+	public String bookAccomodation(@ModelAttribute("bookingForm") BookingForm bookingForm, @PathVariable("lid") String lid, Model model, BindingResult bindingResult) throws Exception{
+		//System.out.println(">>>listing id: " + id);
+		if(!listService.checkVacancyAvailable(lid, bookingForm.getDuration())){
+			bindingResult.addError(new ObjectError("range", "Invalid range"));
 
+			return "detailedlisting";
+		}
+
+		bookingForm.setLid(lid);
+		String bookingId = listService.createReservation(bookingForm);
+		model.addAttribute("bookingId", bookingId);
+		
 		return "bookingSuccess";
 	}
 
