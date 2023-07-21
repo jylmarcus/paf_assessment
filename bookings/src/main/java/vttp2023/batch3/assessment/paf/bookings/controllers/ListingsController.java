@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import vttp2023.batch3.assessment.paf.bookings.models.BookingForm;
 import vttp2023.batch3.assessment.paf.bookings.models.FullListing;
@@ -36,7 +37,7 @@ public class ListingsController {
 	
 	//TODO: Task 3
 	@GetMapping("/search")
-	public String searchListings(@Valid @ModelAttribute("searchForm") SearchForm searchForm, BindingResult bindingResult, Model model) {
+	public String searchListings(@Valid @ModelAttribute("searchForm") SearchForm searchForm, BindingResult bindingResult, HttpSession session, Model model) {
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("countryList", listService.getListOfCountries());
 			return "index";
@@ -53,32 +54,33 @@ public class ListingsController {
 			return "noListings";
 		}
 
+		session.setAttribute("searchForm", searchForm);
 		model.addAttribute("searchListings", listings);
 		return "searchResult";
 	}
 
 	//TODO: Task 4
 	@GetMapping("/search/{id}")
-	public String getListing(@PathVariable("id") String id, @RequestHeader(value = HttpHeaders.REFERER, required = false) String referrer, Model model){
+	public String getListing(@PathVariable("id") String id, HttpSession session, Model model){
 		FullListing listing = listService.getListingById(id);
 		model.addAttribute("listing", listing);
+		model.addAttribute("listingId", id);
 		model.addAttribute("bookingForm", new BookingForm());
+		model.addAttribute("previousSearch", session.getAttribute("searchForm"));
 
-		//back link or button to return to view 2
-		if(referrer != null) {
-			model.addAttribute("prevPage", referrer);
-		}
+		session.setAttribute("listing", listing);
 
 		return "detailedlisting";
 	}
 	
 
 	//TODO: Task 5
-	@PostMapping("/book/{id}")
-	public String bookAccomodation(@ModelAttribute("bookingForm") BookingForm bookingForm, @PathVariable("lid") String lid, Model model, BindingResult bindingResult) throws Exception{
-		//System.out.println(">>>listing id: " + id);
+	@PostMapping("/book/{lid}")
+	public String bookAccomodation(@ModelAttribute("bookingForm") BookingForm bookingForm, @PathVariable("lid") String lid, HttpSession session, Model model, BindingResult bindingResult) throws Exception{
+		//System.out.println(">>>listing id: " + lid);
 		if(!listService.checkVacancyAvailable(lid, bookingForm.getDuration())){
 			bindingResult.addError(new ObjectError("range", "Invalid range"));
+			model.addAttribute("listing", session.getAttribute("listing"));
 
 			return "detailedlisting";
 		}
@@ -86,7 +88,7 @@ public class ListingsController {
 		bookingForm.setLid(lid);
 		String bookingId = listService.createReservation(bookingForm);
 		model.addAttribute("bookingId", bookingId);
-		
+
 		return "bookingSuccess";
 	}
 

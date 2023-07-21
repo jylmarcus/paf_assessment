@@ -45,7 +45,7 @@
     
     <h1>Bookings</h1>
 
-    <form data-th-action="@{/book/{lid}(lid=${listing.summary.id})}" method="post" data-th-object="${bookingForm}">
+    <form data-th-action="@{/book/{lid}(lid=${listingId})}" method="post" data-th-object="${bookingForm}">
         <input type="hidden" data-th-field="*{lid}" data-th-value="${listing.summary.id}">
         <table class="booking-table">
             <tr class="booking-table-row">
