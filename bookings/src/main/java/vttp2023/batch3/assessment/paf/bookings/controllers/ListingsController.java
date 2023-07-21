@@ -66,6 +66,7 @@ public class ListingsController {
 		model.addAttribute("previousSearch", session.getAttribute("searchForm"));
 
 		session.setAttribute("listing", listing);
+		session.setAttribute("listingId", id);
 
 		return "detailedlisting";
 	}
@@ -78,6 +79,7 @@ public class ListingsController {
 		if(!listService.checkVacancyAvailable(lid, bookingForm.getDuration())){
 			bindingResult.addError(new ObjectError("range", "Invalid range"));
 			model.addAttribute("listing", session.getAttribute("listing"));
+			model.addAttribute("listingId", session.getAttribute("listingId"));
 
 			return "detailedlisting";
 		}
